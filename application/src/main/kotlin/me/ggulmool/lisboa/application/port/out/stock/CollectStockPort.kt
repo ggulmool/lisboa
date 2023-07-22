@@ -1,8 +1,8 @@
-package me.ggulmool.lisboa.application.port.out
+package me.ggulmool.lisboa.application.port.out.stock
 
 import me.ggulmool.lisboa.domain.stock.StockCode
 
-interface StockListPort {
+interface CollectStockPort {
 
     fun getAll(): List<StockCode>
 }

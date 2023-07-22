@@ -1,6 +1,6 @@
 package me.ggulmool.lisboa.adapter.parser
 
-import me.ggulmool.lisboa.application.port.out.StockParsePort
+import me.ggulmool.lisboa.application.port.out.stock.ParseStockPort
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.common.StringUtil
@@ -9,7 +9,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
-class NaverStockParser: StockParsePort {
+class NaverStockParser: ParseStockPort {
 
     private val url: String = "https://finance.naver.com/item/main.nhn?code=%s"
 
