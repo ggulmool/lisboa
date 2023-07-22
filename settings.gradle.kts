@@ -1,4 +1,4 @@
 rootProject.name = "lisboa"
 
 include("application")
-include("adapters:lisboa-parser")
+include("adapters:lisboa-out-collector")
