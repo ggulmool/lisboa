@@ -4,5 +4,5 @@ import me.ggulmool.lisboa.domain.stock.StockCode
 
 interface CollectStockPort {
 
-    fun getAll(): List<StockCode>
+    fun getStockList(): Iterable<StockCode>
 }

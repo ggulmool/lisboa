@@ -1,28 +1,21 @@
 package me.ggulmool.lisboa.adapter.db.entity.common
 
-import jakarta.persistence.Column
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.PrePersist
-import jakarta.persistence.PreUpdate
-import java.time.ZonedDateTime
+import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.time.LocalDateTime
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener::class)
 abstract class BaseEntity {
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    var createdAt: LocalDateTime = LocalDateTime.now()
+        protected set
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP COMMENT '생성일시'")
-    private var createdAt: ZonedDateTime? = null
-
-    @Column(name = "modified_at", columnDefinition = "TIMESTAMP COMMENT '변경일시'")
-    private var modifiedAt: ZonedDateTime? = null
-
-    @PrePersist
-    fun prePersist() {
-        createdAt = ZonedDateTime.now()
-        modifiedAt = ZonedDateTime.now()
-    }
-
-    @PreUpdate
-    fun preUpdate() {
-        modifiedAt = ZonedDateTime.now()
-    }
+    @LastModifiedDate
+    @Column(nullable = false)
+    var modifiedAt: LocalDateTime = LocalDateTime.now()
+        protected set
 }

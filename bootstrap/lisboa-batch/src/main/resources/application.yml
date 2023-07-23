@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: lisboa-batch
+  profiles:
+    include:
+      - db
