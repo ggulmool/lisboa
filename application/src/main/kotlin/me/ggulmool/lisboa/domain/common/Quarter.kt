@@ -1,11 +1,14 @@
 package me.ggulmool.lisboa.domain.common
 
-enum class Quarter(val quarterSet: Set<String>) {
+enum class Quarter(
+    val quarterName: String,
+    val quarterSet: Set<String>,
+) {
 
-    FIRST(setOf("01","02","03")),
-    SECOND(setOf("04","05","06")),
-    THIRD(setOf("07","08","09")),
-    FOURTH(setOf("10","11","12"))
+    FIRST("03", setOf("01","02","03")),
+    SECOND("06", setOf("04","05","06")),
+    THIRD("09", setOf("07","08","09")),
+    FOURTH("12", setOf("10","11","12"))
     ;
 
     companion object {

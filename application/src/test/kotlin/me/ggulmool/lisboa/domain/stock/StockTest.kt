@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
+import me.ggulmool.lisboa.domain.profits.QuarterProfit
 import me.ggulmool.lisboa.domain.profits.QuarterProfits
 import me.ggulmool.lisboa.domain.profits.YearProfits
 import java.math.BigDecimal
@@ -26,7 +27,7 @@ class StockTest : StringSpec({
         ),
         QuarterProfits(
             mutableMapOf(
-                "2019" to Profits(
+                "2019" to QuarterProfit(
                     mutableMapOf(
                         Quarter.FIRST to Money("40,500,000,000"),
                         Quarter.SECOND to Money("40,500,000,000"),
@@ -34,7 +35,7 @@ class StockTest : StringSpec({
                         Quarter.FOURTH to Money("79,600,000,000")
                     )
                 ),
-                "2020" to Profits(
+                "2020" to QuarterProfit(
                     mutableMapOf(
                         Quarter.FIRST to Money("88,200,000,000"),
                         Quarter.SECOND to Money("97,800,000,000"),

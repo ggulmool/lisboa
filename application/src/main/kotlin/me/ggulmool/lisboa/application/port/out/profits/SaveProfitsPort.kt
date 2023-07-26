@@ -4,5 +4,5 @@ import me.ggulmool.lisboa.domain.stock.Stock
 
 interface SaveProfitsPort {
 
-    fun saveYearProfits(stock: Stock)
+    fun saveProfits(stock: Stock)
 }

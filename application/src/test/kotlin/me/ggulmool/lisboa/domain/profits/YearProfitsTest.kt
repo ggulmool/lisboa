@@ -8,13 +8,13 @@ class YearProfitsTest : StringSpec({
 
     "연간 영업이익 X" {
         val yearProfits = YearProfits()
-        yearProfits.hasYearProfits() shouldBe false
+        yearProfits.hasProfits() shouldBe false
     }
 
     "연간 영업이익 O" {
         val yearProfits = YearProfits(
             mutableMapOf("2023" to Money("30000"))
         )
-        yearProfits.hasYearProfits() shouldBe true
+        yearProfits.hasProfits() shouldBe true
     }
 })

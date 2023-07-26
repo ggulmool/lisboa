@@ -8,19 +8,19 @@ import java.math.BigDecimal
  * 연간 영업이익
  */
 class YearProfits(
-    val yearProfitsMap: MutableMap<String, Money> = mutableMapOf()
+    val profitsMap: MutableMap<String, Money> = mutableMapOf()
 ) {
 
-    fun hasYearProfits(): Boolean {
-        return yearProfitsMap.keys.size > 0
+    fun hasProfits(): Boolean {
+        return profitsMap.keys.size > 0
     }
 
     fun addProfit(year: String, money: Money) {
-        yearProfitsMap[year] = money
+        profitsMap[year] = money
     }
 
     fun profit(year: String): Money? {
-        return yearProfitsMap[year]
+        return profitsMap[year]
     }
 
     fun yoy(year: String): String {

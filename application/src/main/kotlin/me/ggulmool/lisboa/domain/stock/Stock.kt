@@ -20,7 +20,11 @@ class Stock(
 ) {
 
     fun hasYearProfits(): Boolean {
-        return yearProfits.hasYearProfits()
+        return yearProfits.hasProfits()
+    }
+
+    fun hasQuarterProfits(): Boolean {
+        return quarterProfits.hasProfits()
     }
 
     /**

@@ -26,12 +26,12 @@ class InstantScheduler(
     fun collectStockInfos() {
         collectStockPort.getStockList().forEach {
             try {
-                if (it.no == "035420") {
+//                if (it.no == "035420") {
                     val stock = parseStockPort.parse(it.no)
                     saveStockPort.saveSector(stock.sector)
                     saveStockPort.saveStock(stock)
-                    saveProfitsPort.saveYearProfits(stock)
-                }
+                    saveProfitsPort.saveProfits(stock)
+//                }
             } catch (e: Exception) {
                 logger.info { "${it.name} + ${it.no}" }
             }

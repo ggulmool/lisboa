@@ -3,16 +3,18 @@ package me.ggulmool.lisboa.domain.profits
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.common.StringUtil
-import me.ggulmool.lisboa.domain.stock.Profits
 import java.math.BigDecimal
 
 class QuarterProfits(
-    private var profitsMap: MutableMap<String, Profits>
+    val profitsMap: MutableMap<String, QuarterProfit> = mutableMapOf()
 ) {
+    fun hasProfits(): Boolean {
+        return profitsMap.keys.size > 0
+    }
 
     fun addYear(year: String) {
         if (profitsMap[year] == null) {
-            profitsMap[year] = Profits(mutableMapOf())
+            profitsMap[year] = QuarterProfit(mutableMapOf())
         }
     }
 
@@ -29,7 +31,7 @@ class QuarterProfits(
         return profits?.profit(quarter)
     }
 
-    private fun getYearProfits(year: String): Profits? {
+    private fun getYearProfits(year: String): QuarterProfit? {
         return profitsMap[year]
     }
 

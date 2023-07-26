@@ -1,11 +1,11 @@
-package me.ggulmool.lisboa.domain.stock
+package me.ggulmool.lisboa.domain.profits
 
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import java.math.BigDecimal
 
-class Profits(
-    private var profits: MutableMap<Quarter, Money>
+class QuarterProfit(
+    var profits: MutableMap<Quarter, Money> = mutableMapOf()
 ) {
     fun put(quarter: Quarter, money: Money) {
         profits[quarter] = money
