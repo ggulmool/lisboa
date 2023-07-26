@@ -5,24 +5,36 @@ import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.common.StringUtil
 import me.ggulmool.lisboa.domain.stock.*
+import mu.KotlinLogging
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import org.springframework.stereotype.Component
 
-class NaverStockParser: ParseStockPort {
+@Component
+class NaverStockParser : ParseStockPort {
+
+    private val logger = KotlinLogging.logger {}
 
     private val url: String = "https://finance.naver.com/item/main.nhn?code=%s"
 
-    override fun parse(stockNo: String, marketType: MarketType): Stock {
+    override fun parse(stockNo: String): Stock {
         val document = Jsoup.connect(String.format(url, stockNo)).get()
         val name = extractStockName(document)
         val currentPrice = extractCurrentPrice(document)
         val stockQuantity = extractStockQuantity(document)
 
+        val marketType: MarketType = try {
+            extractMarketType(document)
+        } catch (e: Exception) {
+            logger.warn(e) { "$stockNo: 마켓종류 데이터 추출시 오류 발생" }
+            MarketType.NONE
+        }
+
         val sector = try {
             extractSector(document)
         } catch (e: Exception) {
-            println("$stockNo 섹터 데이터 추출시 오류 발생 : ${e.toString()}")
+            logger.warn(e) { "$stockNo: 종목 섹터 데이터 추출시 오류 발생" }
             Sector.DEFAULT
         }
 
@@ -42,16 +54,6 @@ class NaverStockParser: ParseStockPort {
             quarterProfits,
             description
         )
-    }
-
-    fun extractMarketType(stockNo: String): MarketType {
-        val document = Jsoup.connect(String.format(url, stockNo)).get()
-        return try {
-            extractMarketType(document)
-        } catch (e: Exception) {
-            println("marketType parse error : $stockNo")
-            MarketType.NONE
-        }
     }
 
     private fun extractMarketType(document: Document): MarketType {
@@ -78,7 +80,7 @@ class NaverStockParser: ParseStockPort {
             try {
                 elements.select("div#aside").select("div.first > table > tbody > tr")[2].select("td > em")
             } catch (e: Exception) {
-                println("주식수 데이터 추출시 오류 발생 : ${e.toString()}")
+                logger.info { "주식수 데이터 추출시 오류 발생 :" }
                 elements.select("div#aside").select("div.first > table > tbody > tr")[1].select("td > em")
             }
         return StockQuantity(stockQuantityElement.text())
@@ -88,7 +90,7 @@ class NaverStockParser: ParseStockPort {
         val elements = getCompanyInfoTableElements(document)
         val sectorNoElement = elements.select("div.trade_compare > h4").select("em > a").attr("href")
         val sectorNo = sectorNoElement.substring(sectorNoElement.lastIndexOf("no=") + 3)
-        return Sector[sectorNo.toInt()]
+        return Sector[sectorNo]
     }
 
     private fun extractYearProfit(document: Document): YearProfits {

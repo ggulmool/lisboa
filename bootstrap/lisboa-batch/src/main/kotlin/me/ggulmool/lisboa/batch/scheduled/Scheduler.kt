@@ -13,14 +13,14 @@ class Scheduler(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    @Scheduled(cron = "0 9 * * * MON") // 매주 월요일 오전 9시
-    fun collectStockList() {
-        collectStockPort.getStockList().forEach {
-            try {
-                saveStockPort.saveStock(it)
-            } catch (e: Exception) {
-                logger.info { "${it.name} + ${it.no}" }
-            }
-        }
-    }
+//    @Scheduled(cron = "0 9 * * * MON") // 매주 월요일 오전 9시
+//    fun collectBasicStockInfos() {
+//        collectStockPort.getStockList().forEach {
+//            try {
+//                saveStockPort.saveStock(it)
+//            } catch (e: Exception) {
+//                logger.info { "${it.name} + ${it.no}" }
+//            }
+//        }
+//    }
 }
