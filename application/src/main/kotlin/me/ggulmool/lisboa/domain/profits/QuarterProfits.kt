@@ -1,8 +1,9 @@
-package me.ggulmool.lisboa.domain.stock
+package me.ggulmool.lisboa.domain.profits
 
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.common.StringUtil
+import me.ggulmool.lisboa.domain.stock.Profits
 import java.math.BigDecimal
 
 class QuarterProfits(

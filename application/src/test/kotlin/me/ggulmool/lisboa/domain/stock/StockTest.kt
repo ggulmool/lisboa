@@ -4,6 +4,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
+import me.ggulmool.lisboa.domain.profits.QuarterProfits
+import me.ggulmool.lisboa.domain.profits.YearProfits
 import java.math.BigDecimal
 
 class StockTest : StringSpec({

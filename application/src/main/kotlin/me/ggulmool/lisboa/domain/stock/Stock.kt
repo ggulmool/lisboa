@@ -2,6 +2,8 @@ package me.ggulmool.lisboa.domain.stock
 
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
+import me.ggulmool.lisboa.domain.profits.QuarterProfits
+import me.ggulmool.lisboa.domain.profits.YearProfits
 import java.math.BigDecimal
 
 class Stock(
@@ -16,6 +18,10 @@ class Stock(
     var quarterProfits: QuarterProfits,
     var description: String?
 ) {
+
+    fun hasYearProfits(): Boolean {
+        return yearProfits.hasYearProfits()
+    }
 
     /**
      * 시가총액 = 현재가 * 상장주식수

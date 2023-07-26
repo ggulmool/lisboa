@@ -4,6 +4,8 @@ import me.ggulmool.lisboa.application.port.out.stock.ParseStockPort
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.common.StringUtil
+import me.ggulmool.lisboa.domain.profits.QuarterProfits
+import me.ggulmool.lisboa.domain.profits.YearProfits
 import me.ggulmool.lisboa.domain.stock.*
 import mu.KotlinLogging
 import org.jsoup.Jsoup

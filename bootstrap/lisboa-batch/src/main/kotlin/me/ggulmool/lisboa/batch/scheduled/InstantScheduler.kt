@@ -1,5 +1,6 @@
 package me.ggulmool.lisboa.batch.scheduled
 
+import me.ggulmool.lisboa.application.port.out.profits.SaveProfitsPort
 import me.ggulmool.lisboa.application.port.out.stock.CollectStockPort
 import me.ggulmool.lisboa.application.port.out.stock.ParseStockPort
 import me.ggulmool.lisboa.application.port.out.stock.SaveStockPort
@@ -13,6 +14,7 @@ class InstantScheduler(
     private val collectStockPort: CollectStockPort,
     private val parseStockPort: ParseStockPort,
     private val saveStockPort: SaveStockPort,
+    private val saveProfitsPort: SaveProfitsPort,
 ): ApplicationRunner {
     private val logger = KotlinLogging.logger {}
 
@@ -28,6 +30,7 @@ class InstantScheduler(
                     val stock = parseStockPort.parse(it.no)
                     saveStockPort.saveSector(stock.sector)
                     saveStockPort.saveStock(stock)
+                    saveProfitsPort.saveYearProfits(stock)
                 }
             } catch (e: Exception) {
                 logger.info { "${it.name} + ${it.no}" }

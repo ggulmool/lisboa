@@ -1,4 +1,4 @@
-package me.ggulmool.lisboa.domain.stock
+package me.ggulmool.lisboa.domain.profits
 
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.StringUtil
@@ -8,12 +8,11 @@ import java.math.BigDecimal
  * 연간 영업이익
  */
 class YearProfits(
-    yearProfitsMap: MutableMap<String, Money>
+    val yearProfitsMap: MutableMap<String, Money> = mutableMapOf()
 ) {
-    private var yearProfitsMap = mutableMapOf<String, Money>()
 
-    init {
-        this.yearProfitsMap = yearProfitsMap
+    fun hasYearProfits(): Boolean {
+        return yearProfitsMap.keys.size > 0
     }
 
     fun addProfit(year: String, money: Money) {
