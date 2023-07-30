@@ -6,8 +6,6 @@ import org.springframework.data.repository.query.Param
 
 interface StockRepository: JpaRepository<StockEntity, Long> {
 
-    fun findByStockNo(stockNo: String): StockEntity?
-
     @Query(
         """
             select stock, sector from StockEntity stock 
@@ -16,4 +14,13 @@ interface StockRepository: JpaRepository<StockEntity, Long> {
         """
     )
     fun findStockByQuery(@Param("stockNo") stockNo: String): StockEntity?
+
+    @Query(
+        """
+            select stock, sector from StockEntity stock 
+            join stock.sectorEntity sector
+            where sector.sectorNo = :sectorNo
+        """
+    )
+    fun findStockBySectorNoQuery(@Param("sectorNo") sectorNo: String): List<StockEntity>
 }

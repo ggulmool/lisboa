@@ -40,7 +40,7 @@ class StockEntity(
     fun updateStockInfo(stock: Stock, sectorEntity: SectorEntity) {
         this.stockName = stock.name
         this.sectorEntity = sectorEntity
-        this.market = stock.marketType.name
+        this.market = stock.marketType.market
         this.description = stock.description
         this.currentPrice = stock.currentPrice.price
         this.stockQuantity = stock.stockQuantity.value

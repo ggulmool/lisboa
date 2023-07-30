@@ -22,46 +22,56 @@ class ProfitsDbAdapter(
 
     @Transactional
     override fun saveProfits(stock: Stock) {
-        val findStockEntity = stockRepository.findByStockNo(stock.stockNo) ?: throw IllegalStateException("저장된 종목의 주식 정보가 없습니다.")
+        val savedStockEntity = stockRepository.findStockByQuery(stock.stockNo) ?: throw IllegalStateException("저장된 종목의 주식 정보가 없습니다.")
 
         if (stock.hasYearProfits()) {
-            val yearProfits = stock.yearProfits
-            saveYearProfits(yearProfits, findStockEntity)
+            saveYearProfits(stock.yearProfits, savedStockEntity)
         }
 
-        if (stock.hasYearProfits()) {
-            val quarterProfits = stock.quarterProfits
-            saveQuarterProfits(quarterProfits, findStockEntity)
+        if (stock.hasQuarterProfits()) {
+            saveQuarterProfits(stock.quarterProfits, savedStockEntity)
         }
     }
 
-    private fun saveYearProfits(yearProfits: YearProfits, findStockEntity: StockEntity) {
+    private fun saveYearProfits(yearProfits: YearProfits, stockEntity: StockEntity) {
         yearProfits.profitsMap.forEach { entry ->
-            yearProfitsRepository.save(
-                YearProfitsEntity(
-                    stockYearProfitsId = null,
-                    stockEntity = findStockEntity,
-                    year = entry.key,
-                    profits = entry.value.price
+            val findByYear = yearProfitsRepository.findByStockNoAndYear(stockEntity.stockNo, entry.key)
+            if (findByYear != null) {
+                findByYear.update(yearProfits.profit(entry.key)!!.price)
+            } else {
+                yearProfitsRepository.save(
+                    YearProfitsEntity(
+                        stockYearProfitsId = null,
+                        stockEntity = stockEntity,
+                        year = entry.key,
+                        profits = entry.value.price
+                    )
                 )
-            )
+            }
         }
     }
 
-    private fun saveQuarterProfits(quarterProfits: QuarterProfits, findStockEntity: StockEntity) {
+    private fun saveQuarterProfits(quarterProfits: QuarterProfits, stockEntity: StockEntity) {
         quarterProfits.profitsMap.forEach { entry ->
             val profits = entry.value.profits
 
             profits.forEach { quarterEntry ->
-                quarterProfitsRepository.save(
-                    QuarterProfitsEntity(
-                        stockProfitsId = null,
-                        stockEntity = findStockEntity,
-                        year = entry.key,
-                        quarter = quarterEntry.key.quarterName,
-                        profits = quarterEntry.value.price
+                val findByYearAndQuarter =
+                    quarterProfitsRepository.findByStockNoAndYearAndQuarter(stockEntity.stockNo, entry.key, quarterEntry.key.quarterName)
+
+                if (findByYearAndQuarter != null) {
+                    findByYearAndQuarter.update(quarterEntry.value.price)
+                } else {
+                    quarterProfitsRepository.save(
+                        QuarterProfitsEntity(
+                            stockProfitsId = null,
+                            stockEntity = stockEntity,
+                            year = entry.key,
+                            quarter = quarterEntry.key.quarterName,
+                            profits = quarterEntry.value.price
+                        )
                     )
-                )
+                }
             }
         }
     }

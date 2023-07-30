@@ -28,20 +28,17 @@ class InstantScheduler(
     fun collectStockInfos() {
         collectStockPort.getStockList().forEach {
             try {
-                if (it.no == "035420") {
+//                if (it.no == "035420") {
                 val stock = parseStockPort.parse(it.no)
                 if (stock.isActiveMarketTypes()) {
-                    saveStockPort.saveSector(stock.sector)
                     saveStockPort.saveStock(stock)
                     saveProfitsPort.saveProfits(stock)
-
-                    logger.info {"${it.no} =  ${loadStockPort.loadStock(it.no).calculateMarketCapitalization()}"}
                 } else {
                     logger.info {"${it.name} + ${it.no}" }
                 }
-                }
+//                }
             } catch (e: Exception) {
-                logger.info {"${it.name} + ${it.no}" }
+                logger.warn(e) {"${it.name}(${it.no}) 종목 수집 실패" }
             }
         }
     }

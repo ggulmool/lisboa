@@ -22,9 +22,10 @@ class SectorEntity(
     var multiple: Int,
 ): BaseEntity() {
 
-    fun update(sector: Sector) {
+    fun update(sector: Sector): SectorEntity {
         this.sectorNo = sector.no
         this.sectorName = sector.industryName
         this.multiple = sector.multiple
+        return this
     }
 }

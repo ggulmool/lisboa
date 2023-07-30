@@ -23,5 +23,9 @@ class YearProfitsEntity(
     val year: String,
 
     @Column(name = "profits")
-    val profits: BigDecimal,
-)
+    var profits: BigDecimal,
+) {
+    fun update(profits: BigDecimal) {
+        this.profits = profits
+    }
+}

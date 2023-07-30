@@ -4,6 +4,7 @@ import me.ggulmool.lisboa.adapter.db.entity.profits.QuarterProfitsDto
 import me.ggulmool.lisboa.adapter.db.entity.profits.QuarterProfitsRepository
 import me.ggulmool.lisboa.adapter.db.entity.profits.YearProfitsDto
 import me.ggulmool.lisboa.adapter.db.entity.profits.YearProfitsRepository
+import me.ggulmool.lisboa.adapter.db.entity.stock.StockEntity
 import me.ggulmool.lisboa.adapter.db.entity.stock.StockRepository
 import me.ggulmool.lisboa.application.port.out.stock.LoadStockPort
 import me.ggulmool.lisboa.domain.common.Money
@@ -26,19 +27,41 @@ class LoadStockProfitsDbAdapter(
 
     override fun loadStock(stockNo: String): Stock {
         val findByStock = stockRepository.findStockByQuery(stockNo) ?: throw IllegalStateException("존재하지 않는 종목입니다. $stockNo")
-
         val findYearProfits = yearProfitsRepository.findYearProfitsByQuery(stockNo)
         val findQuarterProfits = quarterProfitsRepository.findQuarterProfitsByQuery(stockNo)
+
+        return createStock(findByStock, findYearProfits, findQuarterProfits)
+    }
+
+    override fun loadStocks(sectorNo: String): Iterable<Stock> {
+        val stocks = stockRepository.findStockBySectorNoQuery(sectorNo)
+        val yearProfitsGroups = yearProfitsRepository.findYearProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
+        val quarterProfitsGroups = quarterProfitsRepository.findQuarterProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
+
+        return stocks.map {
+            createStock(
+                it,
+                yearProfitsGroups.getValue(it.stockNo),
+                quarterProfitsGroups.getValue(it.stockNo)
+            )
+        }
+    }
+
+    private fun createStock(
+        stockEntity: StockEntity,
+        yearProfitsDtos: List<YearProfitsDto>,
+        quarterProfitsDtos: List<QuarterProfitsDto>,
+    ): Stock {
         return Stock(
-            stockNo = stockNo,
-            marketType = MarketType[findByStock.market],
-            name = findByStock.stockName,
-            currentPrice = Money(findByStock.currentPrice),
-            stockQuantity = StockQuantity(findByStock.stockQuantity),
-            sector = Sector[findByStock.sectorEntity.sectorNo],
-            yearProfits = mapToYearProfits(findYearProfits),
-            quarterProfits = mapToQuarterProfits(findQuarterProfits),
-            description = findByStock.description
+            stockNo = stockEntity.stockNo,
+            marketType = MarketType[stockEntity.market],
+            name = stockEntity.stockName,
+            currentPrice = Money(stockEntity.currentPrice),
+            stockQuantity = StockQuantity(stockEntity.stockQuantity),
+            sector = Sector[stockEntity.sectorEntity.sectorNo],
+            yearProfits = mapToYearProfits(yearProfitsDtos),
+            quarterProfits = mapToQuarterProfits(quarterProfitsDtos),
+            description = stockEntity.description
         )
     }
 
