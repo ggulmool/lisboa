@@ -3,6 +3,7 @@ package me.ggulmool.lisboa.domain.profits
 import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.StringUtil
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 /**
  * 연간 영업이익
@@ -40,10 +41,10 @@ class YearProfits(
                 return StringUtil.EMPTY
             }
 
-            return (currentYearProfit.price.divide(previousYearProfit.price, 2, BigDecimal.ROUND_CEILING))
+            return (currentYearProfit.price.divide(previousYearProfit.price, 2, RoundingMode.CEILING))
                 .minus(BigDecimal.ONE)
                 .multiply(BigDecimal("100"))
-                .setScale(1, BigDecimal.ROUND_DOWN).toString()
+                .setScale(1, RoundingMode.DOWN).toString()
         }
 
         return StringUtil.EMPTY

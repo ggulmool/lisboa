@@ -62,7 +62,7 @@ class QuarterProfits(
         return StringUtil.EMPTY
     }
 
-    private fun profit(year: String, quarter: Quarter): Money? {
+    fun profit(year: String, quarter: Quarter): Money? {
         val profits = getYearProfits(year)
         return profits?.profit(quarter)
     }

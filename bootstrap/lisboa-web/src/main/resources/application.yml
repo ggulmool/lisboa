@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: lisboa-web
+  profiles:
+    include:
+      - db
+
+server:
+  port: 8081

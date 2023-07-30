@@ -1,7 +1,7 @@
 apply(plugin= "kotlin-jpa")
 
 dependencies {
-    compileOnly(project(":application"))
+    implementation(project(":application"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // H2DB
