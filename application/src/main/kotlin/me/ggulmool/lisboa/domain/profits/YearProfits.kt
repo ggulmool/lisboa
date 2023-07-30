@@ -10,7 +10,6 @@ import java.math.BigDecimal
 class YearProfits(
     val profitsMap: MutableMap<String, Money> = mutableMapOf()
 ) {
-
     fun hasProfits(): Boolean {
         return profitsMap.keys.size > 0
     }

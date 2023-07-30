@@ -43,7 +43,8 @@ class StockTest : StringSpec({
                     )
                 )
             )
-        ), null
+        ),
+        ""
     )
 
     "시가총액 계산" {

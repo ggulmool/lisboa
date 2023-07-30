@@ -30,7 +30,8 @@ class StockDbAdapter(
                     stockNo = stock.stockNo,
                     stockName = stock.name,
                     sectorEntity = findSectorEntity,
-                    market = stock.marketType.name,
+                    market = stock.marketType.market,
+                    currentPrice = stock.currentPrice.price,
                     stockQuantity = stock.stockQuantity.value,
                     description = stock.description
                 )

@@ -1,6 +1,8 @@
 package me.ggulmool.lisboa.domain.stock
 
-enum class MarketType(val market: String) {
+enum class MarketType(
+    val market: String
+) {
 
     KOSPI("코스피"),
     KOSDAQ("코스닥"),

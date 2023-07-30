@@ -12,14 +12,19 @@ class QuarterProfits(
         return profitsMap.keys.size > 0
     }
 
-    fun addYear(year: String) {
-        if (profitsMap[year] == null) {
-            profitsMap[year] = QuarterProfit(mutableMapOf())
-        }
+    fun addQuarterProfit(year: String, quarterProfit: QuarterProfit) {
+        profitsMap[year] = quarterProfit
     }
 
     fun addQuarterProfit(year: String, quarter: Quarter, money: Money) {
+        addYear(year)
         profitsMap[year]!!.put(quarter, money)
+    }
+
+    private fun addYear(year: String) {
+        if (profitsMap[year] == null) {
+            profitsMap[year] = QuarterProfit(mutableMapOf())
+        }
     }
 
     fun profit(year: String): Money? {

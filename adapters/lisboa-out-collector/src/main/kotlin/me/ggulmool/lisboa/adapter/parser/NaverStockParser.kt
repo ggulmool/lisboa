@@ -82,7 +82,7 @@ class NaverStockParser : ParseStockPort {
             try {
                 elements.select("div#aside").select("div.first > table > tbody > tr")[2].select("td > em")
             } catch (e: Exception) {
-                logger.info { "주식수 데이터 추출시 오류 발생 :" }
+                logger.info { "주식수 데이터 추출시 오류 발생 fallback 처리" }
                 elements.select("div#aside").select("div.first > table > tbody > tr")[1].select("td > em")
             }
         return StockQuantity(stockQuantityElement.text())
@@ -130,7 +130,7 @@ class NaverStockParser : ParseStockPort {
                             val year = element.text().substring(0, 4)
                             val month = element.text().substring(5, 7)
 
-                            quarterProfits.addYear(year)
+//                            quarterProfits.addYear(year)
                             quarterProfits.addQuarterProfit(
                                 year,
                                 Quarter[month],

@@ -5,6 +5,7 @@ import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.profits.QuarterProfits
 import me.ggulmool.lisboa.domain.profits.YearProfits
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class Stock(
     var stockNo: String,
@@ -13,11 +14,15 @@ class Stock(
     var currentPrice: Money,
     var stockQuantity: StockQuantity,
     var sector: Sector,
-    var sales: Sales?,
+    var sales: Sales? = null,
     var yearProfits: YearProfits,
     var quarterProfits: QuarterProfits,
-    var description: String?
+    var description: String
 ) {
+
+    fun isActiveMarketTypes(): Boolean {
+        return marketType == MarketType.KOSPI || marketType == MarketType.KOSDAQ
+    }
 
     fun hasYearProfits(): Boolean {
         return yearProfits.hasProfits()
@@ -59,10 +64,10 @@ class Stock(
      *  상승여력 = ((목표시총 / 시총) - 1.0) * 100
      */
     fun increaseSpareCapacity(targetMarketCap: Money, marketCap: Money): BigDecimal {
-        return (targetMarketCap.price.divide(marketCap.price, 2, BigDecimal.ROUND_CEILING))
+        return (targetMarketCap.price.divide(marketCap.price, 2, RoundingMode.CEILING))
             .minus(BigDecimal.ONE)
             .multiply(BigDecimal("100"))
-            .setScale(1, BigDecimal.ROUND_DOWN)
+            .setScale(1, RoundingMode.DOWN)
     }
 
     /**
@@ -70,7 +75,7 @@ class Stock(
      */
     fun targetPrice(year: String): Money {
         val targetMarketCapitalization = calculateTargetMarketCapitalization(year).price
-        return Money(targetMarketCapitalization.divide(stockQuantity.value,0, BigDecimal.ROUND_CEILING))
+        return Money(targetMarketCapitalization.divide(stockQuantity.value,0, RoundingMode.CEILING))
     }
 
     /**

@@ -21,16 +21,19 @@ class StockEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sector_id")
-    var sectorEntity: SectorEntity? = null,
+    var sectorEntity: SectorEntity,
 
     @Column(name = "stock_market")
-    var market: String? = null,
+    var market: String,
+
+    @Column(name = "current_price")
+    var currentPrice: BigDecimal,
 
     @Column(name = "quantity")
-    val stockQuantity: BigDecimal? = null,
+    var stockQuantity: BigDecimal,
 
     @Column(name = "stock_description")
-    var description: String? = null,
+    var description: String,
 
     ): BaseEntity() {
 
@@ -39,5 +42,7 @@ class StockEntity(
         this.sectorEntity = sectorEntity
         this.market = stock.marketType.name
         this.description = stock.description
+        this.currentPrice = stock.currentPrice.price
+        this.stockQuantity = stock.stockQuantity.value
     }
 }

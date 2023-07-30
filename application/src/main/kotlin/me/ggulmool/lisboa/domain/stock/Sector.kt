@@ -2,7 +2,7 @@ package me.ggulmool.lisboa.domain.stock
 
 enum class Sector(val no: String, val industryName: String, val multiple: Int) {
 
-    DEFAULT("99999", "섹터기본", Multiple.GENERAL),
+    DEFAULT("9999", "섹터기본", Multiple.GENERAL),
     STARTUP_INVESTMENT("277", "창업투자", Multiple.GENERAL),
     STATIONERY("332", "문구류", Multiple.GENERAL),
     NON_LIFE_INSURANCE("315", "손해보험", Multiple.FINANCE_STOCK),
