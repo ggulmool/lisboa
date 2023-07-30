@@ -6,5 +6,5 @@ interface LoadStockPort {
 
     fun loadStock(stockNo: String): Stock
 
-    fun loadStocks(sectorNo: String): Iterable<Stock>
+    fun loadStocks(sectorNo: String): List<Stock>
 }

@@ -1,8 +1,13 @@
 package me.ggulmool.lisboa.application.port.`in`
 
+import java.math.BigDecimal
+import java.math.BigInteger
+
 interface GetStockQuery {
 
     fun getStock(stockNo: String): StockPresentation
+
+    fun getStocksBySectorNo(sectorNo: String): List<StockPresentation>
 
     data class StockPresentation(
         val code: String,       // 종목코드
@@ -21,7 +26,7 @@ interface GetStockQuery {
         val qoq: String,        // QoQ(%)
         val marketCapitalization: String,       // 현시총(억)
         val targetMarketCapitalization: String, // 목표시총(억)
-        val increaseSpareCapacity: String,      // 상승여력
+        val increaseSpareCapacity: BigDecimal,  // 상승여력
         val multiple: Int,                      // 멀티플	업종
         val currentPrice: String,               // 현재가(원)
         val targetCurrentPrice: String,         // 목표가(원)

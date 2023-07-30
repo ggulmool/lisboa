@@ -16,4 +16,9 @@ class StockController(
     fun getStock(@RequestParam("stock_no") stockNo: String): GetStockQuery.StockPresentation {
         return getStockQuery.getStock(stockNo)
     }
+
+    @GetMapping("/sector")
+    fun getStockBySector(@RequestParam("sector_no") sectorNo: String): List<GetStockQuery.StockPresentation> {
+        return getStockQuery.getStocksBySectorNo(sectorNo)
+    }
 }

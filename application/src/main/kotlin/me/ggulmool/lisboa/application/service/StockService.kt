@@ -3,6 +3,7 @@ package me.ggulmool.lisboa.application.service
 import me.ggulmool.lisboa.application.port.`in`.GetStockQuery
 import me.ggulmool.lisboa.application.port.out.stock.LoadStockPort
 import me.ggulmool.lisboa.domain.common.Quarter
+import me.ggulmool.lisboa.domain.stock.Stock
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,6 +13,18 @@ class StockService(
     override fun getStock(stockNo: String): GetStockQuery.StockPresentation {
         val stock = loadStockPort.loadStock(stockNo)
 
+        return mapToStockInfo(stock)
+    }
+
+    override fun getStocksBySectorNo(sectorNo: String): List<GetStockQuery.StockPresentation> {
+        return loadStockPort.loadStocks(sectorNo)
+            .map { mapToStockInfo(it) }
+            .sortedByDescending {
+                it.increaseSpareCapacity
+            }
+    }
+
+    private fun mapToStockInfo(stock: Stock): GetStockQuery.StockPresentation {
         val marketCapitalization = stock.calculateMarketCapitalization()
         val targetMarketCapitalization = stock.calculateTargetMarketCapitalization("2023")
 
@@ -35,7 +48,7 @@ class StockService(
             increaseSpareCapacity = stock.increaseSpareCapacity(
                 targetMarketCapitalization,
                 marketCapitalization
-            ).toString(),
+            ),
             multiple = stock.sector.multiple,
             currentPrice = stock.currentPrice.moneyFormat(),
             targetCurrentPrice = stock.targetPrice("2023").moneyFormat(),

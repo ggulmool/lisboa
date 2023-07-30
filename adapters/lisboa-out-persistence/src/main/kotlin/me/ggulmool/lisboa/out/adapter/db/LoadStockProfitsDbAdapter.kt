@@ -33,7 +33,7 @@ class LoadStockProfitsDbAdapter(
         return createStock(findByStock, findYearProfits, findQuarterProfits)
     }
 
-    override fun loadStocks(sectorNo: String): Iterable<Stock> {
+    override fun loadStocks(sectorNo: String): List<Stock> {
         val stocks = stockRepository.findStockBySectorNoQuery(sectorNo)
         val yearProfitsGroups = yearProfitsRepository.findYearProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
         val quarterProfitsGroups = quarterProfitsRepository.findQuarterProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
