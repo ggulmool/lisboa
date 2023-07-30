@@ -1,3 +1,7 @@
+apply {
+    plugin("org.springframework.boot")
+}
+
 dependencies {
     implementation(project(":application"))
     implementation(project(":adapters:lisboa-out-collector"))

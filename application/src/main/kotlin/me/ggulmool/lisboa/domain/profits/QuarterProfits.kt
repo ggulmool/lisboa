@@ -4,6 +4,7 @@ import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.common.StringUtil
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class QuarterProfits(
     val profitsMap: MutableMap<String, QuarterProfit> = mutableMapOf()
@@ -31,11 +32,6 @@ class QuarterProfits(
         return profitsMap[year] ?.calculateProfit()
     }
 
-    fun profit(year: String, quarter: Quarter): Money? {
-        val profits = getYearProfits(year)
-        return profits?.profit(quarter)
-    }
-
     private fun getYearProfits(year: String): QuarterProfit? {
         return profitsMap[year]
     }
@@ -57,12 +53,17 @@ class QuarterProfits(
                 return StringUtil.EMPTY
             }
 
-            return (currentQuarterProfit.price.divide(previousQuarterProfit.price, 2, BigDecimal.ROUND_CEILING))
+            return (currentQuarterProfit.price.divide(previousQuarterProfit.price, 2, RoundingMode.CEILING))
                 .minus(BigDecimal.ONE)
                 .multiply(BigDecimal("100"))
-                .setScale(1, BigDecimal.ROUND_DOWN).toString()
+                .setScale(1, RoundingMode.DOWN).toString()
         }
 
         return StringUtil.EMPTY
+    }
+
+    private fun profit(year: String, quarter: Quarter): Money? {
+        val profits = getYearProfits(year)
+        return profits?.profit(quarter)
     }
 }
