@@ -9,6 +9,8 @@ interface GetStockQuery {
 
     fun getStocksBySectorNo(sectorNo: String): List<StockPresentation>
 
+    fun getRankStockNos(): List<String>
+
     data class StockPresentation(
         val code: String,       // 종목코드
         val name: String,       // 종목명

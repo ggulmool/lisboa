@@ -21,4 +21,9 @@ class StockController(
     fun getStockBySector(@RequestParam("sector_no") sectorNo: String): List<GetStockQuery.StockPresentation> {
         return getStockQuery.getStocksBySectorNo(sectorNo)
     }
+
+    @GetMapping("/rank")
+    fun getRankStockNo(): List<String> {
+        return getStockQuery.getRankStockNos()
+    }
 }

@@ -3,3 +3,6 @@ GET http://localhost:8081/v1/stock?stock_no=071050
 
 ### 섹터별 주식 조회
 GET http://localhost:8081/v1/stock/sector?sector_no=311
+
+### 주식 랭킹 조회
+GET http://localhost:8081/v1/stock/rank

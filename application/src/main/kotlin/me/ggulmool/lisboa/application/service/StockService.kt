@@ -4,12 +4,16 @@ import me.ggulmool.lisboa.application.port.`in`.GetStockQuery
 import me.ggulmool.lisboa.application.port.out.stock.LoadStockPort
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.stock.Stock
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 
 @Service
 class StockService(
     private val loadStockPort: LoadStockPort,
 ) : GetStockQuery {
+
+    private val logger = KotlinLogging.logger {}
+
     override fun getStock(stockNo: String): GetStockQuery.StockPresentation {
         val stock = loadStockPort.loadStock(stockNo)
 
@@ -22,6 +26,15 @@ class StockService(
             .sortedByDescending {
                 it.increaseSpareCapacity
             }
+    }
+
+    override fun getRankStockNos(): List<String> {
+        return loadStockPort.loadStocks()
+            .map { mapToStockInfo(it) }
+            .sortedByDescending {
+                it.increaseSpareCapacity
+            }
+            .map { it.code }
     }
 
     private fun mapToStockInfo(stock: Stock): GetStockQuery.StockPresentation {

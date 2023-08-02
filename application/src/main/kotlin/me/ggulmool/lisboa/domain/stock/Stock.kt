@@ -4,6 +4,7 @@ import me.ggulmool.lisboa.domain.common.Money
 import me.ggulmool.lisboa.domain.common.Quarter
 import me.ggulmool.lisboa.domain.profits.QuarterProfits
 import me.ggulmool.lisboa.domain.profits.YearProfits
+import mu.KotlinLogging
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -19,6 +20,7 @@ class Stock(
     var quarterProfits: QuarterProfits,
     var description: String
 ) {
+    private val logger = KotlinLogging.logger {}
 
     fun isActiveMarketTypes(): Boolean {
         return marketType == MarketType.KOSPI || marketType == MarketType.KOSDAQ
@@ -82,13 +84,23 @@ class Stock(
      * 연간 영업이익 YoY = ((올해년도 영업이익 / 전년 영업이익) - 1.0) * 100
      */
     fun yoy(year: String): String {
-        return yearProfits.yoy(year)
+        return try {
+            yearProfits.yoy(year)
+        } catch (e: Exception) {
+            logger.warn(e) {"$stockNo 종목 yoy 계산중 오류 발생"}
+            "0"
+        }
     }
 
     /**
      * 분기 영업이익 QoQ ((현분기 영업이익 / 직전분기 영업이익) - 1.0) * 100
      */
     fun qoq(year: String, currentQuarter: Quarter, previousQuarter: Quarter): String {
-        return quarterProfits.qoq(year, currentQuarter, previousQuarter)
+        return try {
+            quarterProfits.qoq(year, currentQuarter, previousQuarter)
+        } catch (e: Exception) {
+            logger.warn(e) {"$stockNo 종목 qoq 계산중 오류 발생"}
+            "0"
+        }
     }
 }

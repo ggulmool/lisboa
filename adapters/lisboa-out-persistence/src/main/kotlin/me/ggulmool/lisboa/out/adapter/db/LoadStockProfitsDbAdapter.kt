@@ -23,10 +23,11 @@ class LoadStockProfitsDbAdapter(
     private val stockRepository: StockRepository,
     private val quarterProfitsRepository: QuarterProfitsRepository,
     private val yearProfitsRepository: YearProfitsRepository,
-): LoadStockPort {
+) : LoadStockPort {
 
     override fun loadStock(stockNo: String): Stock {
-        val findByStock = stockRepository.findStockByQuery(stockNo) ?: throw IllegalStateException("존재하지 않는 종목입니다. $stockNo")
+        val findByStock =
+            stockRepository.findStockByQuery(stockNo) ?: throw IllegalStateException("존재하지 않는 종목입니다. $stockNo")
         val findYearProfits = yearProfitsRepository.findYearProfitsByQuery(stockNo)
         val findQuarterProfits = quarterProfitsRepository.findQuarterProfitsByQuery(stockNo)
 
@@ -34,15 +35,31 @@ class LoadStockProfitsDbAdapter(
     }
 
     override fun loadStocks(sectorNo: String): List<Stock> {
-        val stocks = stockRepository.findStockBySectorNoQuery(sectorNo)
-        val yearProfitsGroups = yearProfitsRepository.findYearProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
-        val quarterProfitsGroups = quarterProfitsRepository.findQuarterProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
+        return stocks(
+            stockRepository.findStockBySectorNoQuery(sectorNo),
+            yearProfitsRepository.findYearProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo },
+            quarterProfitsRepository.findQuarterProfitsBySectorNoQuery(sectorNo).groupBy { it.stockNo }
+        )
+    }
 
+    override fun loadStocks(): List<Stock> {
+        return stocks(
+            stockRepository.findAllStocks(),
+            yearProfitsRepository.findAllYearProfits().groupBy { it.stockNo },
+            quarterProfitsRepository.findAllQuarterProfits().groupBy { it.stockNo }
+        )
+    }
+
+    private fun stocks(
+        stocks: List<StockEntity>,
+        yearProfitsGroups: Map<String, List<YearProfitsDto>>,
+        quarterProfitsGroups: Map<String, List<QuarterProfitsDto>>,
+    ): List<Stock> {
         return stocks.map {
             createStock(
                 it,
-                yearProfitsGroups.getValue(it.stockNo),
-                quarterProfitsGroups.getValue(it.stockNo)
+                yearProfitsGroups.getOrDefault(it.stockNo, listOf()),
+                quarterProfitsGroups.getOrDefault(it.stockNo, listOf())
             )
         }
     }
@@ -68,7 +85,7 @@ class LoadStockProfitsDbAdapter(
     private fun mapToYearProfits(yearProfits: List<YearProfitsDto>): YearProfits {
         return YearProfits(
             yearProfits.associateBy(
-                {it.year}, {Money(it.profits)}
+                { it.year }, { Money(it.profits) }
             ).toMutableMap())
     }
 

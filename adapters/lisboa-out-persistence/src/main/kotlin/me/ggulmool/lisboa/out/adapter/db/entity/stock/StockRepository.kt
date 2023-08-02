@@ -23,4 +23,12 @@ interface StockRepository: JpaRepository<StockEntity, Long> {
         """
     )
     fun findStockBySectorNoQuery(@Param("sectorNo") sectorNo: String): List<StockEntity>
+
+    @Query(
+        """
+            select stock, sector from StockEntity stock 
+            join stock.sectorEntity sector
+        """
+    )
+    fun findAllStocks(): List<StockEntity>
 }

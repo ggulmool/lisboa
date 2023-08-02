@@ -36,6 +36,15 @@ interface QuarterProfitsRepository: JpaRepository<QuarterProfitsEntity, Long> {
         """
     )
     fun findQuarterProfitsBySectorNoQuery(@Param("sectorNo") sectorNo: String): List<QuarterProfitsDto>
+
+    @Query(
+        """
+            select new me.ggulmool.lisboa.out.adapter.db.entity.profits.QuarterProfitsDto(stock.stockNo, quarter_profits.year, quarter_profits.quarter, quarter_profits.profits) from QuarterProfitsEntity quarter_profits 
+            join quarter_profits.stockEntity stock
+            join stock.sectorEntity sector
+        """
+    )
+    fun findAllQuarterProfits(): List<QuarterProfitsDto>
 }
 
 data class QuarterProfitsDto(
