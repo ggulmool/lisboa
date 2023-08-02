@@ -6,5 +6,4 @@ dependencies {
 
     // H2DB
     runtimeOnly("com.h2database:h2")
-    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
 }

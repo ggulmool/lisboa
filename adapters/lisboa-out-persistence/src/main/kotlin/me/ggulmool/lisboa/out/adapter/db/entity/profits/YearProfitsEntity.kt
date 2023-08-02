@@ -19,7 +19,7 @@ class YearProfitsEntity(
     @JoinColumn(name = "stock_id")
     val stockEntity: StockEntity,
 
-    @Column(name = "year")
+    @Column(name = "profits_year")
     val year: String,
 
     @Column(name = "profits")
