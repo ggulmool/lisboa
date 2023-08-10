@@ -20,4 +20,6 @@ logging:
     org:
       hibernate:
         SQL: debug
-        type: trace
+        orm:
+          jdbc:
+            bind: trace # 바인딩 변수에만
