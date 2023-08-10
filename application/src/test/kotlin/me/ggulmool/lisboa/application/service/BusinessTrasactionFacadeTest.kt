@@ -68,6 +68,19 @@ class BusinessTrasactionFacadeTest(
         }
     }
 
+    Given("소프트 delete 후 저장 테스트") {
+        businessInfoRepository.save(BusinessEntity("1", "11", 1, "N"))
+
+        When("기존 actYn이 N인건을 다시 등록하면") {
+            businessInfoTransactionFacade.saveBusiness("1", "11", "api1")
+            Then("actYn가 Y로 업데이트 되어야 한다.") {
+                val actual = businessInfoRepository.findByIdOrThrow(BusinessId("1", "11"))
+                actual.bisno shouldBe "11"
+                actual.actYn shouldBe "Y"
+            }
+        }
+    }
+
     afterEach {
         withContext(Dispatchers.IO) {
             businessInfoRepository.deleteAll()
