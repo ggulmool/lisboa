@@ -11,9 +11,9 @@ spring:
     properties:
       hibernate:
 #    database: h2
-#    database-platform: org.hibernate.dialect.H2Dialect
 #        show_sql: true
-#        format_sql: true
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
 
 logging:
   level:
@@ -23,3 +23,7 @@ logging:
         orm:
           jdbc:
             bind: trace # 바인딩 변수에만
+      springframework:
+        orm:
+          jpa: debug
+        transaction: debug

@@ -7,6 +7,7 @@ import io.kotest.extensions.spring.SpringTestLifecycleMode
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import me.ggulmool.lisboa.application.service.test.BusinessInfoSaveService
 import me.ggulmool.lisboa.application.service.test.BusinessInfoTransactionFacade
 import me.ggulmool.lisboa.out.adapter.db.entity.common.findByIdOrThrow
 import me.ggulmool.lisboa.out.adapter.db.entity.test.BusinessEntity
@@ -28,6 +29,7 @@ import org.springframework.test.context.TestPropertySource
 class BusinessTrasactionFacadeTest(
     private val businessInfoTransactionFacade: BusinessInfoTransactionFacade,
     private val businessInfoRepository: BusinessInfoRepository,
+    private val businessInfoSaveService: BusinessInfoSaveService,
 ) : BehaviorSpec({
 
     extensions(SpringTestExtension(SpringTestLifecycleMode.Root))
@@ -54,16 +56,29 @@ class BusinessTrasactionFacadeTest(
 
     Given("트랜잭션 테스트") {
         businessInfoRepository.save(BusinessEntity("1", "11", 1, "Y"))
-
         When("외부 api 호출이 실패하면 저장되지 않아야 한다.") {
-            businessInfoTransactionFacade.saveBusiness("1", "33", "apiFailNo")
             Then("해당 uid로 조회시 기존 저장된 한건만 조회되어야 한다.") {
+                shouldThrow<IllegalStateException> {
+                    businessInfoTransactionFacade.saveBusiness("1", "33", "apiFailNo")
+                }
+
                 val actual = businessInfoRepository.findByUidOrderByModifiedAtDesc("1")
                 actual.size shouldBe 1
+            }
+        }
+    }
 
-                shouldThrow<NoSuchElementException> {
-                    businessInfoRepository.findByIdOrThrow(BusinessId("1", "33"))
-                }
+    Given("기가입 트랜잭션 테스트") {
+        businessInfoRepository.save(BusinessEntity("1", "11", 1, "Y"))
+        When("외부 api 호출 응답시 기가입 케이스인 경우") {
+            businessInfoTransactionFacade.saveBusiness("1", "33", "dup")
+            Then("해당 uid로 조회시 기존 저장된 한건만 조회되어야 한다.") {
+                val actual = businessInfoRepository.findByUidOrderBySeqAsc("1")
+                actual.size shouldBe 2
+                actual[0].bisno shouldBe "33"
+                actual[0].seq shouldBe 1
+                actual[1].bisno shouldBe "11"
+                actual[1].seq shouldBe 2
             }
         }
     }
@@ -80,6 +95,7 @@ class BusinessTrasactionFacadeTest(
             }
         }
     }
+
 
     afterEach {
         withContext(Dispatchers.IO) {
